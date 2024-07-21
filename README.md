@@ -1,2 +1,2 @@
-# SQL-Data-Lab
+# SQL-Portfolio
 SQL Portfolio
