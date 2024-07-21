@@ -37,11 +37,11 @@ SELECT
 FROM superstore;
 
 SELECT 
-	COUNT(*) AS kitchen_supplies_item_count,
+    COUNT(*) AS kitchen_supplies_item_count,
     SUM(price) AS kitchen_supplies_price_total,
     AVG(price) AS kitchen_supplies_average_item_price
-FROM superstore
-WHERE CATEGORY='Kitchen Supplies';
+    FROM superstore
+    WHERE CATEGORY='Kitchen Supplies';
 
 SELECT item_name, stock_quantity, price
 FROM superstore
