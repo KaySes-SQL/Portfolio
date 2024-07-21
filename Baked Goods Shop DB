@@ -1,0 +1,57 @@
+CREATE TABLE baked_goods_shop
+(id INTEGER, flavour TEXT, product TEXT, quantity INTEGER, price NUMERIC);
+
+/** flavour of baked goods
+Banana 
+Lemon 
+Blueberry 
+Chocolate Chip 
+Sugar 
+Oatmeal 
+Cranberry White Chocolate 
+Tuxedo 
+Raisin 
+Vanilla
+Red Velvet 
+Chocolate 
+Key Lime 
+Butter Tart 
+Lemon Meringue 
+Cheesecake 
+**/
+
+INSERT INTO baked_goods_shop VALUES(1, "Banana Bread","Loaf", 1, 10.99);
+INSERT INTO baked_goods_shop VALUES(2, "Lemon", "Loaf", 1, 10.99);
+INSERT INTO baked_goods_shop VALUES(3, "Blueberry", "Loaf",1, 10.99);
+INSERT INTO baked_goods_shop VALUES(4, "Chocolate Chip","Cookie", 1, 2.75);
+INSERT INTO baked_goods_shop VALUES(5, "Sugar","Cookie", 1, 2.75);
+INSERT INTO baked_goods_shop VALUES(6, "Oatmeal","Cookie", 1, 2.75);
+INSERT INTO baked_goods_shop VALUES(7, "Cranberry","Cookie", 1, 2.75);
+INSERT INTO baked_goods_shop VALUES(8, "Tuxedo","Cookie",1, 2.75);
+INSERT INTO baked_goods_shop VALUES(9, "Raisin","Cookie", 1, 2.75);
+INSERT INTO baked_goods_shop VALUES(10, "Vanilla","Cupcake", 1, 5.49);
+INSERT INTO baked_goods_shop VALUES(11, "Red Velvet","Cupcake", 1, 5.49);
+INSERT INTO baked_goods_shop VALUES(12, "Chocolate","Cupcake", 1, 5.49);
+INSERT INTO baked_goods_shop VALUES(13, "Key Lime","Cupcake", 1, 5.49);
+INSERT INTO baked_goods_shop VALUES(14, "Butter Tart","Sheet", 1, 12.99);
+INSERT INTO baked_goods_shop VALUES(15, "Lemon Meringue","Sheet", 1, 12.99);
+INSERT INTO baked_goods_shop VALUES(16, "Cheesecake","Sheet", 1, 12.99);
+
+SELECT * FROM baked_goods_shop;
+/* Baked goods pricing lowest to highest */
+SELECT flavour, product, price FROM baked_goods_shop ORDER BY price ASC;
+
+/* Cookie total */
+SELECT SUM(price) AS "All Cookies Total" FROM baked_goods_shop WHERE product = "Cookie";
+
+/* Cupcake total */
+SELECT SUM(price) AS "All Cupcakes Total" FROM baked_goods_shop WHERE product = "Cupcake";
+
+/* Loaf total */
+SELECT SUM(price) AS "All Loaves Total" FROM baked_goods_shop WHERE product = "Loaf";
+
+/* Sheet total */
+SELECT SUM(price) AS "All Sheets Total" FROM baked_goods_shop WHERE product = "Sheet";
+
+/* Average item price */
+SELECT AVG(price) AS "Average Item Price" FROM baked_goods_shop
