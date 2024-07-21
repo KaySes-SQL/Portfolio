@@ -1,9 +1,10 @@
-CREATE TABLE baked_goods_shop
-(id INTEGER, 
+CREATE TABLE baked_goods_shop (
+id INTEGER, 
 flavour TEXT, 
 product TEXT, 
 quantity INTEGER, 
-price NUMERIC);
+price NUMERIC
+);
 
 /** flavour of baked goods
 Banana 
