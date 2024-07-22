@@ -36,12 +36,11 @@ SELECT
     MIN(price) AS minimum_price,
     MAX(price) AS maximum_price,
     AVG(price) AS average_price
-    
 FROM superstore;
 
 /* 3. Total number of kitchen supply items, price and average price statistics*/
 SELECT 
-	COUNT(*) AS kitchen_supplies_item_count,
+    COUNT(*) AS kitchen_supplies_item_count,
     SUM(price) AS kitchen_supplies_price_total,
     AVG(price) AS kitchen_supplies_average_item_price
 FROM superstore
@@ -50,5 +49,4 @@ WHERE CATEGORY ='Kitchen Supplies';
 /* 4. Pricing and quantity of specific items*/
 SELECT item_name, stock_quantity, price
 FROM superstore
-WHERE item_name IN ('Robot Vacuum Cleaner', 'Cotton Bedding Set', 'Slow Cooker')
-;
+WHERE item_name IN ('Robot Vacuum Cleaner', 'Cotton Bedding Set', 'Slow Cooker');
