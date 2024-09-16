@@ -1,0 +1,209 @@
+-- For this project, I downloaded the Chinook database for SQLite Studio. The data set represents a digital media store which includes tables for artists, tracks, invoices, customers, and employees.
+-- I performed analytics on the data using SQL. 
+
+--1. Customers who are not located in the USA.
+SELECT 
+    FirstName AS "Cusomter First Name",
+    LastName AS "Customer Last Name", 
+    CustomerId AS "Customer ID", 
+    Country 
+FROM chinook.customers 
+WHERE Country != "USA"
+ORDER BY Country ASC;
+
+--2. Show only the Customers from Canada.
+SELECT * 
+FROM chinook.customers 
+WHERE Country = "Canada";
+
+--3. Invoices of customers who are from Canada.
+SELECT cust.LastName AS "Customer Last Name", 
+    cust.FirstName AS " Customer First Name", 
+    inv.InvoiceId AS "Invoice ID",
+    inv.BillingCountry AS "Billing Country", 
+    inv.InvoiceDate AS "Invoice Date"
+FROM chinook.invoices AS inv 
+LEFT JOIN chinook.customers AS cust 
+    ON inv.CustomerId = cust.CustomerId 
+WHERE inv.BillingCountry = "Canada"
+ORDER BY cust.LastName, cust.FirstName;
+
+--4. Employees who are sales agents, including hire date, location and email information.
+SELECT 
+    EmployeeId AS "Employee ID", 
+    LastName AS "Last Name", 
+    FirstName AS "First Name", 
+    Title AS "Job Title", 
+    HireDate AS "Hire Date", 
+    City AS "City", 
+    State AS "Province", 
+    Country AS "Country", 
+    Email AS "Email"
+FROM chinook.employees
+WHERE Title = "Sales Support Agent";
+
+--5. A list of unique billing countries.
+SELECT DISTINCT BillingCountry AS "Billing Country"
+FROM chinook.Invoices
+ORDER BY BillingCountry ASC;
+ 
+--6. Sales agents and associated invoices,totals, customer names, and customer country.
+SELECT 
+    emp.EmployeeId AS "Agent ID", 
+    emp.LastName AS "Agent Last Name", 
+    emp.FirstName AS "Agent First Name", 
+    inv.InvoiceId AS "Invoice ID",
+    inv.Total AS "Invoice Total",
+    cust.FirstName AS "Customer First Name", 
+    cust.LastName AS "Customer Last Name", 
+    cust.Country AS "Customer Country"
+FROM chinook.employees emp 
+JOIN chinook.customers cust 
+    ON cust.SupportRepId = emp.EmployeeId
+JOIN chinook.invoices inv 
+    ON inv.CustomerId = cust.CustomerId;
+
+--7. Invoice count and total Sales for 2013.
+SELECT 
+    COUNT(*) AS "2013 Invoice Count",
+    ROUND (SUM(Total), 2) AS " 2013 Total Sales"
+FROM chinook.Invoices
+WHERE InvoiceDate BETWEEN '2009-01-01' AND '2009-12-31';
+
+--8. Purchased tracks, artists, invoice line id and unit price.
+SELECT
+t.Name AS "Track",
+ar.name AS "Artist", 
+i.InvoiceLineId AS "Invoice Line ID",
+i.UnitPrice AS "Unit Price"
+FROM chinook.Invoice_items AS i
+LEFT JOIN chinook.tracks AS t 
+    ON i.TrackID=t.TrackID
+INNER JOIN chinook.albums AS a
+    ON a.AlbumID=t.AlbumID
+LEFT JOIN chinook.artists AS ar
+    ON ar.ArtistID=a.ArtistID;
+
+--9. This query shows all tracks including album name, and media type, sorted alphabetically by genre.
+SELECT 
+g.Name AS "Genre",
+t.Name AS "Track Name", 
+a.Title AS "Album Title", 
+m.Name AS "Media Type"
+FROM chinook.tracks AS t
+JOIN chinook.Albums AS a 
+    ON a.AlbumId = t.AlbumId
+JOIN chinook.Media_Types AS m
+    ON m.MediaTypeId = t.MediaTypeId
+JOIN chinook.Genres AS g
+    ON g.GenreId = t.GenreId
+ORDER BY g.Name ASC;
+
+--10. Total sales processed by each agent. 
+SELECT 
+    emp.EmployeeId AS "Employee ID",
+    emp.FirstName AS "First Name",
+    emp.LastName AS "Last Name",
+ROUND(SUM(Inv.Total), 2) AS "Total Sales" 
+FROM chinook.Employees AS emp
+JOIN chinook.Customers AS cust 
+    ON cust.SupportRepId = emp.EmployeeId
+JOIN chinook.Invoices AS Inv 
+    ON Inv.CustomerId = cust.CustomerId
+WHERE emp.Title = 'Sales Support Agent' 
+GROUP BY emp.FirstName;
+
+--11. Total revenue by country.
+SELECT 
+    cust.Country AS "Country", 
+    ROUND(SUM(inv.Total), 2) AS "Total Revenue"
+FROM chinook.customers AS cust
+JOIN chinook.invoices AS inv 
+    ON cust.CustomerId = inv.CustomerId
+GROUP BY cust.Country
+ORDER BY ROUND(SUM(inv.Total), 2) DESC;
+
+--12. Average order vaalue by country.
+SELECT 
+    cust.Country AS "Country", 
+    ROUND(AVG(ii.UnitPrice * ii.Quantity), 2) AS "Average Order Value"
+FROM chinook.customers AS cust
+JOIN chinook.invoices AS inv 
+    ON cust.CustomerId = inv.CustomerId
+JOIN chinook.invoice_items AS ii 
+    ON inv.InvoiceId = ii.InvoiceId
+GROUP BY cust.Country
+ORDER BY ROUND(AVG(ii.UnitPrice * ii.Quantity), 2) DESC;
+
+--13. Sales made by each agent from highest to lowest.
+SELECT
+    emp.EmployeeId AS "Employee ID", 
+    emp.FirstName AS "First Name", 
+    emp.LastName AS "Last Name",
+    ROUND(SUM(Inv.Total), 2) AS "Total Sales"
+FROM chinook.Employees AS emp
+JOIN chinook.Customers AS cust 
+    ON cust.SupportRepId = emp.EmployeeId
+JOIN chinook.Invoices AS Inv 
+    ON Inv.CustomerId = cust.CustomerId
+WHERE emp.Title = 'Sales Support Agent' 
+    AND Inv.InvoiceDate LIKE '2013%'
+GROUP BY emp.FirstName, emp.LastName
+ORDER BY ROUND(SUM(Inv.Total), 2) DESC;
+
+--14. Top 10 most popular tracks based on total sales and revenue generated.
+SELECT 
+    t.Name AS "Track Name", 
+    COUNT(i.InvoiceLineId) AS "Total Sales", 
+    ROUND(SUM(i.UnitPrice * i.Quantity), 2) AS "Total Revenue"
+FROM chinook.tracks AS t
+JOIN chinook.invoice_items AS i 
+    ON t.TrackId = i.TrackId
+GROUP BY t.Name
+ORDER BY COUNT(i.InvoiceLineId) DESC
+LIMIT 10;
+
+--15. Query to find total revenue generated by all tracks in 2013.
+SELECT 
+    t.Name AS "Track Name", 
+    COUNT(i.InvoiceLineId) AS "2013 Total Sales",
+    ROUND(SUM(i.UnitPrice * i.Quantity), 2) AS "2013 Total Revenue"
+FROM chinook.tracks AS t
+JOIN chinook.invoice_items AS i 
+    ON t.TrackId = i.TrackId
+JOIN chinook.invoices AS inv
+    ON i.InvoiceId = inv.InvoiceId
+WHERE inv.InvoiceDate BETWEEN '2013-01-01' AND '2013-12-31'
+GROUP BY t.Name
+ORDER BY COUNT(i.InvoiceLineId) DESC;
+
+--16. Top 10 artists based on total sales and revenue generated.
+SELECT 
+    ar.Name AS "Artist Name",
+    COUNT(i.InvoiceLineId) AS "Total Sales",
+    ROUND(SUM(i.UnitPrice * i.Quantity), 2) AS "Total Revenue"
+FROM chinook.tracks AS t
+JOIN chinook.invoice_items AS i 
+    ON t.TrackId = i.TrackId
+JOIN chinook.albums AS a
+    ON t.AlbumId = a.AlbumId
+JOIN chinook.artists AS ar
+    ON a.ArtistId = ar.ArtistId
+GROUP BY ar.Name
+ORDER BY COUNT(i.InvoiceLineId) DESC
+LIMIT 10;
+
+--17. Total revenue generated by each genre.
+SELECT 
+    g.Name AS "Genre", 
+    ROUND(SUM(ii.UnitPrice * ii.Quantity), 2) AS "Total Revenue"
+FROM chinook.genres AS g
+JOIN chinook.tracks AS t 
+    ON g.GenreId = t.GenreId
+JOIN chinook.invoice_items AS ii 
+    ON t.TrackId = ii.TrackId
+JOIN chinook.invoices AS inv 
+    ON ii.InvoiceId = inv.InvoiceId
+GROUP BY g.Name
+ORDER BY ROUND(SUM(ii.UnitPrice * ii.Quantity), 2) DESC;
+
