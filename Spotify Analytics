@@ -1,4 +1,4 @@
--- For this project, I downloaded Spotify data from Kaggle.Then I created a table to insert Spotify data into. 
+-- For this project, I downloaded Spotify data from Kaggle.Then I created a table to insert the Spotify data into. 
 -- Finally, I performed analytics on the data using SQL. 
 
 --Creating the table
@@ -21,9 +21,6 @@ valence decimal(4,3) NOT NULL,
 tempo decimal(6,3) NOT NULL,
 duration_ms integer NOT NULL,
 time_signature integer NOT NULL);
-
---Then I inserted the Spotify data into the table.
---Nest I explored the data using the following SQL queries. 
 
 -- 1. First I determined the average popularity and energy by artist and track. 
 SELECT
