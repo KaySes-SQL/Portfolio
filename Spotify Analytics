@@ -46,7 +46,7 @@ FROM BIT_DB.Spotifydata
 ORDER BY popularity DESC
 LIMIT 10;
 
--- 4. Next I identified all tracks with a daceability score above 0.8
+-- 4. Next I identified all tracks with a danceability score above 0.8
 SELECT track_name,
 artist_name,
 danceability
