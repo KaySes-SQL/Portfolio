@@ -68,7 +68,7 @@ SELECT
     COUNT(*) AS "2013 Invoice Count",
     ROUND (SUM(Total), 2) AS " 2013 Total Sales"
 FROM chinook.Invoices
-WHERE InvoiceDate BETWEEN '2009-01-01' AND '2009-12-31';
+WHERE InvoiceDate BETWEEN '2013-01-01' AND '2013-12-31';
 
 --8. Purchased tracks, artists, invoice line id and unit price.
 SELECT
