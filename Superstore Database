@@ -50,3 +50,12 @@ WHERE CATEGORY ='Kitchen Supplies';
 SELECT item_name, stock_quantity, price
 FROM superstore
 WHERE item_name IN ('Robot Vacuum Cleaner', 'Cotton Bedding Set', 'Slow Cooker');
+
+-- 5. Order the items by price
+Select item_name, price
+FROM superstore
+ORDER BY price desc;
+
+-- 6. Show the average price of items in the store
+SELECT avg(price)
+FROM superstore;
